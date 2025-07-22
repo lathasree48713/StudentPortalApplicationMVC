@@ -1,0 +1,167 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Ensure your layout is correctly set
+}
+
+<h3 class="page-title text-primary">Welcome back...</h3>
+<p class="page-description lead mb-4">Your personalized student dashboard, keeping you connected to your academic journey.</p>
+
+<div class="row mt-4 dashboard-cards-row">
+    @* Added a class for specific row styling *@
+    <div class="col-md-3">
+        <div class="card dashboard-card primary-card mb-3">
+            @* Added custom classes *@
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-user fa-2x me-3"></i>
+                    <h5 class="card-title mb-0">Profile</h5>
+                </div>
+                <p class="card-text">View and edit your personal info</p>
+                @Html.ActionLink("Go to Profile", "UserProfile", "Profile", new { }, new { @class = "btn btn-outline-light mt-auto card-btn" }) @* Added card-btn *@
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card dashboard-card success-card mb-3">
+            @* Added custom classes *@
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-book-open fa-2x me-3"></i>
+                    <h5 class="card-title mb-0">Courses</h5>
+                </div>
+                <p class="card-text">Register or view your enrolled courses.</p>
+                @Html.ActionLink("View Courses", "MyCourses", "UserCourses", new { }, new { @class = "btn btn-outline-light mt-auto card-btn" }) @* Corrected Controller to UserCourses if applicable, added card-btn *@
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card dashboard-card warning-card mb-3">
+            @* Added custom classes *@
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-calendar-alt fa-2x me-3"></i>
+                    <h5 class="card-title mb-0">Timetable</h5>
+                </div>
+                <p class="card-text">Check your weekly timetable.</p>
+                @Html.ActionLink("View Timetable", "ViewTimetable", "Timetable", new { }, new { @class = "btn btn-outline-light mt-auto card-btn" }) @* Added card-btn *@
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card dashboard-card danger-card mb-3">
+            @* Added custom classes *@
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-trophy fa-2x me-3"></i>
+                    <h5 class="card-title mb-0">Grades</h5>
+                </div>
+                <p class="card-text">Check your subject-wise grades.</p>
+                @Html.ActionLink("View Grades", "Index", "Grades", new { }, new { @class = "btn btn-outline-light mt-auto card-btn" }) @* Added card-btn *@
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Second row of cards (e.g., summary cards for quick info) *@
+<div class="row mt-4 summary-cards-row">
+    @* Added a class for specific row styling *@
+    <div class="col-xl-3 col-md-6 mb-4">
+        @* Changed to col-xl-3 col-md-6 for better responsiveness *@
+        <div class="card border-left-primary shadow h-100 py-2 summary-card">
+            @* Added summary-card *@
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Registered Courses
+                        </div>
+                        <div class="text-gray-800 summary-value">View all your enrolled courses</div> 
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-book-open fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between bg-primary-light">
+                @* Added bg-primary-light *@
+                <a class="small text-primary stretched-link" href="@Url.Action("MyCourses", "UserCourses")">View Details</a> 
+                <div class="small text-primary"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2 summary-card">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Upcoming Classes
+                        </div>
+                        <div class="text-gray-800 summary-value">See your weekly class schedule</div> @* Placeholder for actual count/info *@
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between bg-success-light">
+                <a class="small text-success stretched-link" href="@Url.Action("ViewTimetable", "Timetable")">View Timetable</a>
+                <div class="small text-success"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2 summary-card">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Pending Assignments
+                        </div>
+                        <div class="text-gray-800 summary-value">Track your deadlines and submissions</div> @* Placeholder for actual count *@
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between bg-warning-light">
+                <a class="small text-warning stretched-link" href="#">View Assignments</a> @* Link to Assignments page if you have one *@
+                <div class="small text-warning"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2 summary-card">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Notifications
+                        </div>
+                        <div class="text-gray-800 summary-value">Stay updated with important announcements</div> @* Placeholder for actual count *@
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-bell fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between bg-danger-light">
+                <a class="small text-danger stretched-link" href="#">View All</a> @* Link to Notifications page if you have one *@
+                <div class="small text-danger"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <script>
+
+    </script>
+}
+

@@ -1,0 +1,78 @@
+﻿
+@{
+    Layout = null; // This line ensures NO layout page is used for this view.
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .landing-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 40px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+
+            .landing-container h1 {
+                color: #007bff;
+                margin-bottom: 25px;
+                font-weight: 600;
+            }
+
+            .landing-container .btn {
+                padding: 12px 30px;
+                font-size: 1.1rem;
+                border-radius: 5px;
+                margin: 10px;
+                min-width: 150px;
+            }
+        .logo {
+            max-width: 150px; 
+            height: auto;
+            margin-bottom: 20px; /* Space between logo and title */
+            display: block; /* Ensures it takes its own line */
+            margin-left: auto; /* Centers the logo */
+            margin-right: auto; /* Centers the logo */
+        }
+    </style>
+</head>
+<body>
+    <div class="landing-container">
+        <img src="@Url.Content("~/images/Logo/Logo.jpg")" alt="Student Portal Logo" class="logo" />
+        <h1>Welcome to Student Portal</h1>
+        <p class="lead mb-4">Your gateway to academic success and personalized student experience.</p>
+
+        <div class="button-group">
+            @Html.ActionLink("Login", "Login", "Account", null, new { @class = "btn btn-primary btn-lg" })
+
+            @Html.ActionLink("Register", "Register", "Account", null, new { @class = "btn btn-outline-secondary btn-lg" })
+
+            <p style="margin-top: 15px;">
+                If you are admin? @Html.ActionLink("click here", "AdminLogin", "Account", null, new { /* No special CSS class */ })
+            </p>
+        </div>
+    </div>
+
+    <script src="@Url.Content("~/Scripts/bootstrap.bundle.min.js")"></script>
+</body>
+</html>

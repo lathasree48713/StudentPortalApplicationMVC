@@ -1,0 +1,447 @@
+﻿/* Set padding to keep content from hitting the edges */
+.body-content {
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+/* --- General Page Styling --- */
+.page-title {
+    color: #343a40; /* Darker title for prominence */
+    margin-bottom: 20px;
+    font-weight: 600;
+    border-bottom: 2px solid #007bff; /* Accent line */
+    padding-bottom: 10px;
+    display: inline-block; /* To make border-bottom fit content */
+}
+
+.page-description {
+    color: #6c757d;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+/* --- Custom Alert Styling (for "No Courses" message) --- */
+.custom-alert {
+    background-color: #e0f7fa; /* Light blue */
+    border-color: #00bcd4; /* Teal border */
+    color: #00796b; /* Dark teal text */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-size: 1.1em;
+}
+
+    .custom-alert .alert-link {
+        color: #004d40; /* Darker link color */
+        font-weight: bold;
+    }
+
+/* --- My Courses Table Container Styling --- */
+.my-courses-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Softer, larger shadow */
+    padding: 25px;
+    overflow-x: auto; /* Ensures table is scrollable on small screens */
+}
+
+/* --- My Courses Table Styling --- */
+.my-courses-table {
+    width: 100%;
+    margin-bottom: 0; /* Remove default table bottom margin */
+    border-collapse: separate; /* Allows border-radius on cells */
+    border-spacing: 0; /* Remove space between cells */
+}
+
+    .my-courses-table thead th {
+        background-color: #007bff; /* Primary blue for header */
+        color: white;
+        font-weight: 600;
+        padding: 15px 12px;
+        text-align: left; /* Default text alignment */
+        border: none; /* Remove default table borders */
+    }
+    /* Specific styles for first and last header cells for rounded corners */
+    .my-courses-table thead tr th:first-child {
+        border-top-left-radius: 8px;
+    }
+
+    .my-courses-table thead tr th:last-child {
+        border-top-right-radius: 8px;
+    }
+
+
+    .my-courses-table tbody td {
+        padding: 12px;
+        vertical-align: middle;
+        border-top: 1px solid #e9ecef; /* Lighter border between rows */
+        color: #495057;
+    }
+
+    .my-courses-table tbody tr:last-child td:first-child {
+        border-bottom-left-radius: 8px;
+    }
+
+    .my-courses-table tbody tr:last-child td:last-child {
+        border-bottom-right-radius: 8px;
+    }
+
+
+    .my-courses-table tbody tr:hover {
+        background-color: #f0f8ff; /* Light blue on hover */
+        transform: translateY(-2px); /* Slight lift effect on hover */
+        transition: all 0.2s ease-in-out; /* Smooth transition */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Subtle shadow on hover */
+    }
+
+/* Styling for the Unregister button - if uncommented later */
+    .btn-outline-danger {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+
+
+
+
+.page-title {
+    color: #343a40; /* Darker title for prominence */
+    margin-bottom: 20px;
+    font-weight: 600;
+    border-bottom: 2px solid #007bff; /* Accent line */
+    padding-bottom: 10px;
+    display: inline-block; /* To make border-bottom fit content */
+}
+
+.page-description {
+    color: #6c757d;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+/* --- Custom Alert Styling (for success/error messages) --- */
+.custom-alert-success {
+    background-color: #e0f7fa; /* Light blue */
+    border-color: #00bcd4; /* Teal border */
+    color: #00796b; /* Dark teal text */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    font-size: 1em;
+    margin-bottom: 20px;
+}
+
+.custom-alert-danger {
+    background-color: #ffe0b2; /* Light orange */
+    border-color: #ff9800; /* Orange border */
+    color: #e65100; /* Dark orange text */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    font-size: 1em;
+    margin-bottom: 20px;
+}
+
+    .custom-alert-success .btn-close, .custom-alert-danger .btn-close {
+        color: inherit; /* Keep close button color consistent */
+    }
+
+
+/* --- Register Courses Table Container Styling --- */
+    .register-courses-container {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Softer, larger shadow */
+        padding: 25px;
+        overflow-x: auto; /* Ensures table is scrollable on small screens */
+    }
+
+/* --- Register Courses Table Styling --- */
+    .register-courses-table {
+        width: 100%;
+        margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .register-courses-table thead th {
+        background-color: #28a745; /* Green for register page header */
+        color: white;
+        font-weight: 600;
+        padding: 15px 12px;
+        text-align: left;
+        border: none;
+    }
+    /* Specific styles for first and last header cells for rounded corners */
+    .register-courses-table thead tr th:first-child {
+        border-top-left-radius: 8px;
+    }
+
+    .register-courses-table thead tr th:last-child {
+        border-top-right-radius: 8px;
+    }
+
+
+    .register-courses-table tbody td {
+        padding: 12px;
+        vertical-align: middle;
+        border-top: 1px solid #e9ecef;
+        color: #495057;
+    }
+
+    .register-courses-table tbody tr:last-child td:first-child {
+        border-bottom-left-radius: 8px;
+    }
+
+    .register-courses-table tbody tr:last-child td:last-child {
+        border-bottom-right-radius: 8px;
+    }
+
+    .register-courses-table tbody tr:hover {
+        background-color: #e6ffe6; /* Light green on hover */
+        transform: translateY(-2px);
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+/* Styling for Status spans */
+.status-registered {
+    color: #007bff; /* Blue */
+    font-weight: bold;
+    background-color: #e7f5ff;
+    padding: 4px 8px;
+    border-radius: 5px;
+}
+
+.status-available {
+    color: #28a745; /* Green */
+    font-weight: bold;
+    background-color: #eafbea;
+    padding: 4px 8px;
+    border-radius: 5px;
+}
+
+/* Styling for the Register button */
+.register-btn {
+    padding: 12px 30px;
+    font-size: 1.1em;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(40,167,69,0.3); /* Green shadow */
+    transition: all 0.3s ease;
+}
+
+    .register-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(40,167,69,0.4);
+    }
+
+/* Checkbox styling (basic for consistency) */
+.form-check-input {
+    width: 1.2em;
+    height: 1.2em;
+    margin-top: 0.25em;
+}
+
+
+
+.page-title {
+    color: #343a40; /* Darker title for prominence */
+    margin-bottom: 20px;
+    font-weight: 600;
+    border-bottom: 2px solid #007bff; /* Accent line */
+    padding-bottom: 10px;
+    display: inline-block; /* To make border-bottom fit content */
+}
+
+.page-description {
+    color: #6c757d;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+/* --- Dashboard Card Styling --- */
+.dashboard-card {
+    border: none; /* Remove default card border */
+    border-radius: 15px; /* More rounded corners */
+    overflow: hidden; /* Ensures content stays within rounded corners */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); /* Stronger, softer shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+}
+
+    .dashboard-card:hover {
+        transform: translateY(-8px); /* Lift card on hover */
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); /* More prominent shadow on hover */
+    }
+
+    /* Specific background colors for the first set of cards */
+    .dashboard-card.primary-card {
+        background-image: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    }
+
+    .dashboard-card.success-card {
+        background-image: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    }
+
+    .dashboard-card.warning-card {
+        background-image: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    }
+
+    .dashboard-card.danger-card {
+        background-image: linear-gradient(135deg, #dc3545 0%, #a71d2a 100%);
+    }
+
+    .dashboard-card .card-body {
+        padding: 25px; /* More padding inside cards */
+        min-height: 180px; /* Ensure consistent card height */
+    }
+
+    .dashboard-card .card-title {
+        font-size: 1.5rem; /* Larger title */
+        font-weight: 700; /* Bolder title */
+        color: #ffffff; /* White text for titles */
+    }
+
+    .dashboard-card .card-text {
+        color: rgba(255, 255, 255, 0.85); /* Slightly transparent white for text */
+        margin-bottom: 15px;
+        flex-grow: 1; /* Allows the text to take up available space, pushing button down */
+    }
+
+    .dashboard-card .fa-2x {
+        color: rgba(255, 255, 255, 0.7); /* Slightly muted icon color */
+        margin-right: 15px !important; /* Ensure spacing for icon */
+    }
+
+.card-btn {
+    border-color: rgba(255, 255, 255, 0.6) !important; /* Lighter border for outline button */
+    color: #ffffff !important;
+    font-weight: 600;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .card-btn:hover {
+        background-color: #ffffff !important;
+        color: var(--primary-color, #007bff) !important; /* Will be overridden by specific card types */
+    }
+
+/* Specific hover colors for buttons based on card background */
+.primary-card .card-btn:hover {
+    color: #007bff !important;
+}
+
+.success-card .card-btn:hover {
+    color: #28a745 !important;
+}
+
+.warning-card .card-btn:hover {
+    color: #ffc107 !important;
+}
+
+.danger-card .card-btn:hover {
+    color: #dc3545 !important;
+}
+
+
+/* --- Summary Card Styling (second row) --- */
+.summary-card {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .summary-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .summary-card .card-body {
+        padding: 20px;
+    }
+
+    .summary-card .text-xs {
+        font-size: 0.7rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .summary-card .h5 {
+        font-size: 1.75rem;
+    }
+
+    .summary-card .fa-2x {
+        color: #e9ecef; /* Lighter gray for icons */
+    }
+
+    .summary-card .card-footer {
+        background-color: #f8f9fa; /* Lighter footer background */
+        border-top: 1px solid #e9ecef;
+        padding: 10px 20px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+/* Light backgrounds for card footers (derived from Bootstrap primary/success etc.) */
+.bg-primary-light {
+    background-color: #e0f0ff !important;
+}
+/* A light version of primary */
+.bg-success-light {
+    background-color: #e2fce9 !important;
+}
+/* A light version of success */
+.bg-warning-light {
+    background-color: #fffde0 !important;
+}
+/* A light version of warning */
+.bg-danger-light {
+    background-color: #ffe0e2 !important;
+}
+/* A light version of danger */
+
+/* Ensure text in card footer uses the main color of the summary card */
+.summary-card .card-footer .small.text-primary {
+    color: #007bff !important;
+}
+
+.summary-card .card-footer .small.text-success {
+    color: #28a745 !important;
+}
+
+.summary-card .card-footer .small.text-warning {
+    color: #ffc107 !important;
+}
+
+.summary-card .card-footer .small.text-danger {
+    color: #dc3545 !important;
+}
+
+.summary-card .summary-value {
+    font-size: 1.1em; 
+    font-weight: normal; 
+    margin-bottom: 0; 
+    line-height: 1.2; 
+}
+
+.summary-card .h5 {
+    font-size: 1.75rem; 
+    font-weight: bold;
+}

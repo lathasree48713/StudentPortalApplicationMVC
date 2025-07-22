@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Admin Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml"; // <--- Add this line!
+}
+
+<h2>@ViewBag.Title</h2>
+<h3>@ViewBag.Message</h3>
+
+<p>This is where admin-specific content and management tools will go.</p>
+
+<div>
+    <ul>
+        <li><a href="@Url.Action("ManageUsers", "Admin")">Manage Users</a></li>
+        <li><a href="@Url.Action("ManageCourses", "Admin")">Manage Courses</a></li>
+        <li><a href="@Url.Action("ViewReports", "Admin")">View Reports</a></li> @* Example links, update as needed *@
+    </ul>
+</div>

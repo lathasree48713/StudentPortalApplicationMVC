@@ -1,0 +1,211 @@
+﻿using System;
+using System.Data.Entity;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks; // Added for async/await
+using System.Web;
+using System.Web.Mvc;
+using StudentPortalMVC.Models;
+using Microsoft.AspNet.Identity;
+using System.Data.Entity.Infrastructure; // For DbUpdateException
+using System.Data.Entity.Validation; // For DbEntityValidationException
+using System.Net; // For HttpStatusCodeResult
+
+namespace StudentPortalMVC.Controllers
+{
+    [Authorize]
+    public class ProfileController : Controller
+    {
+        private ApplicationDbContext _dbContext;
+
+        public ProfileController()
+        {
+            _dbContext = new ApplicationDbContext();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _dbContext.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        // GET: Profile/UserProfile (Action to view the profile)
+        public async Task<ActionResult> UserProfile() // Made async
+        {
+            ViewBag.Title = "View Profile";
+            string currentUserId = User.Identity.GetUserId();
+
+            // Try to find a profile in the database that belongs to the current user
+            var studentProfile = await _dbContext.Profiles.SingleOrDefaultAsync(p => p.UserId == currentUserId); // Made async
+
+            if (studentProfile == null)
+            {
+                // If no profile exists for this user, redirect them to the Edit/Create page
+                TempData["InfoMessage"] = "Welcome! Please fill out your profile details.";
+                return RedirectToAction("EditProfile"); // Redirect to the editing page for creation
+            }
+
+            // If a profile exists, display it
+            return View(studentProfile);
+        }
+
+        // GET: Profile/EditProfile (Action to display the edit form)
+        public async Task<ActionResult> EditProfile() // Made async
+        {
+            ViewBag.Title = "Edit Profile";
+            string currentUserId = User.Identity.GetUserId();
+
+            // Try to find an existing profile for the current user
+            var profile = await _dbContext.Profiles.SingleOrDefaultAsync(p => p.UserId == currentUserId); // Made async
+
+            if (profile == null)
+            {
+                // If no profile exists, create a new, unsaved Profile object for the form.
+                // ProfileId will be 0, indicating a new record for the POST action.
+                profile = new StudentPortalMVC.Models.Profile
+                {
+                    ProfileId = 0, // Explicitly set to 0 to indicate new record
+                    UserId = currentUserId, // Link to the current user
+                    Email = User.Identity.GetUserName(), // Pre-fill email from Identity system
+                    FirstName = "", // Empty for user to fill
+                    LastName = "",
+                    DateOfBirth = DateTime.Today.AddYears(-20), // Provide a reasonable default date
+                    Phone = "",
+                    Department = "",
+                    Address = "",
+                    ProfileImagePath = "~/Content/Images/default_profile.png" // Default image path
+                };
+            }
+            // If existingProfile is not null, it means a profile was found, and it will be passed to the view as is.
+
+            return View(profile);
+        }
+
+
+        // POST: Profile/EditProfile (Handles saving the profile)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditProfile(Profile profile, HttpPostedFileBase ProfileImageFile) // Made async
+        {
+            ViewBag.Title = "Edit Profile";
+            string currentUserId = User.Identity.GetUserId();
+
+            // IMPORTANT SECURITY STEP: Override the UserId from the submitted model
+            // to ensure it matches the actual logged-in user's ID.
+            // This prevents a malicious user from trying to update another user's profile.
+            profile.UserId = currentUserId;
+
+            if (ModelState.IsValid)
+            {
+                Profile profileToSave;
+
+                // Always try to retrieve the existing profile from the database using the UserId
+                // This is the most reliable way to determine if we're creating or updating.
+                var existingProfileInDb = await _dbContext.Profiles.SingleOrDefaultAsync(p => p.UserId == currentUserId);
+
+                if (existingProfileInDb == null)
+                {
+                    // Scenario: No profile exists for this UserId in the database.
+                    // This means we are creating a NEW profile.
+                    // The 'profile' object passed to the action contains the form data for the new profile.
+
+                    profileToSave = profile; // Use the model directly as the new entity
+                    // ProfileId will be auto-generated by the database for new additions (since it's int PK)
+                    _dbContext.Profiles.Add(profileToSave);
+                }
+                else
+                {
+                    // Scenario: A profile already exists for this UserId in the database.
+                    // This means we are UPDATING an existing profile.
+                    // Use the entity fetched from the database for updates.
+                    profileToSave = existingProfileInDb;
+
+                    // Manually update properties from the submitted 'profile' model (form data)
+                    // to the 'profileToSave' entity (the one tracked by DbContext).
+                    profileToSave.FirstName = profile.FirstName;
+                    profileToSave.LastName = profile.LastName;
+                    profileToSave.DateOfBirth = profile.DateOfBirth;
+                    profileToSave.Email = profile.Email;
+                    profileToSave.Phone = profile.Phone;
+                    profileToSave.Department = profile.Department;
+                    profileToSave.Address = profile.Address;
+
+                    // Entity Framework will automatically detect changes and mark the entity as Modified
+                    // if any properties have actually changed. No need for explicit _dbContext.Entry().State = Modified;
+                    // UNLESS you are in a disconnected scenario, which is not the case here as we fetched it.
+                }
+
+                // --- FILE UPLOAD LOGIC ---
+                // This logic applies to both new and existing profiles.
+                if (ProfileImageFile != null && ProfileImageFile.ContentLength > 0)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(ProfileImageFile.FileName);
+                    string uploadDirectory = Server.MapPath("~/Uploads/ProfileImages/");
+
+                    if (!Directory.Exists(uploadDirectory))
+                    {
+                        Directory.CreateDirectory(uploadDirectory);
+                    }
+
+                    string filePath = Path.Combine(uploadDirectory, fileName);
+                    ProfileImageFile.SaveAs(filePath); // Save the uploaded file
+                    profileToSave.ProfileImagePath = "~/Uploads/ProfileImages/" + fileName; // Update the path on the actual entity
+                }
+                // IMPORTANT: If no new file is uploaded, profileToSave.ProfileImagePath retains its old value,
+                // which is the correct behavior to keep the existing image.
+
+                // --- SAVE ALL CHANGES TO THE DATABASE ---
+                try
+                {
+                    await _dbContext.SaveChangesAsync(); // Made async
+                    TempData["SuccessMessage"] = "Profile updated successfully!";
+                    return RedirectToAction("UserProfile"); // Redirect to UserProfile to view changes
+                }
+                catch (DbUpdateException ex)
+                {
+                    // Catch specific database update exceptions (e.g., unique constraint violation)
+                    var sqlException = ex.InnerException?.InnerException as System.Data.SqlClient.SqlException;
+                    if (sqlException != null && sqlException.Number == 2601) // 2601 is for unique constraint violation
+                    {
+                        ModelState.AddModelError("", "A profile already exists for this user. You can only create one profile.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "An unexpected database error occurred. Please try again.");
+                    }
+                    // Log the full exception for detailed debugging
+                    System.Diagnostics.Debug.WriteLine($"DbUpdateException: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Inner Inner Exception (SQL): {sqlException?.Message}");
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    // This catches Entity Framework validation errors (e.g., required fields not filled, max length exceeded)
+                    foreach (var validationErrors in ex.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            ModelState.AddModelError("", validationError.ErrorMessage);
+                            System.Diagnostics.Debug.WriteLine($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                        }
+                    }
+                    ModelState.AddModelError("", "A database validation error occurred. Please check the details provided.");
+                }
+                catch (Exception ex)
+                {
+                    // Catch any other general exceptions
+                    ModelState.AddModelError("", "An unexpected error occurred while saving your profile. Please try again.");
+                    System.Diagnostics.Debug.WriteLine($"General Exception: {ex.Message}");
+                }
+            }
+
+            // If ModelState is not valid or an exception occurred, redisplay the form with validation errors
+            // Ensure UserId is correctly set for the view if validation fails.
+            profile.UserId = currentUserId; // Ensure the UserId is correct for the view model
+            return View(profile);
+        }
+    }
+}

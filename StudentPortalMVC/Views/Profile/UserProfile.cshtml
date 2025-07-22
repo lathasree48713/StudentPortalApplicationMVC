@@ -1,0 +1,67 @@
+﻿@model StudentPortalMVC.Models.Profile
+@{
+    ViewBag.Title = "View Profile";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary mb-4 text-center">Student Profile</h2>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Personal Information</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row" style="min-height: 300px;">
+                <!-- Profile Image Column -->
+                <div class="col-md-4 text-center d-flex align-items-center justify-content-center" style="background-color: #f8f9fa;">
+                    @if (!string.IsNullOrEmpty(Model.ProfileImagePath))
+                    {
+                        <img src="@Url.Content(Model.ProfileImagePath)" alt="Profile Image" class="img-fluid rounded shadow" style="height: 80%; max-height: 200px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <div class="text-muted">No profile photo uploaded.</div>
+                    }
+                </div>
+
+                <!-- Profile Details Column -->
+                <div class="col-md-8">
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Full Name:</div>
+                        <div class="col-sm-8">@Model.FullName</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Date of Birth:</div>
+                        <div class="col-sm-8">@Model.DateOfBirth.ToString("yyyy-MM-dd")</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Email:</div>
+                        <div class="col-sm-8">@Model.Email</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Phone Number:</div>
+                        <div class="col-sm-8">@Model.Phone</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Department:</div>
+                        <div class="col-sm-8">@Model.Department</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-bold">Address:</div>
+                        <div class="col-sm-8">@Model.Address</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer text-end">
+            @Html.ActionLink("Edit Profile", "EditProfile", new { id = Model.ProfileId }, new { @class = "btn btn-outline-primary" })
+        </div>
+    </div>
+</div>

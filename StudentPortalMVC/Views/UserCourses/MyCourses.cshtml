@@ -1,0 +1,57 @@
+﻿@model StudentPortalMVC.ViewModels.MyCoursesViewModel
+
+@{
+    ViewBag.Title = "My Courses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="page-title">My Courses</h2>
+
+<p class="page-description">Here are the courses you are currently registered for:</p>
+
+@if (Model.EnrolledCourses != null && Model.EnrolledCourses.Any())
+{
+    <div class="my-courses-container">
+       
+        <table class="table my-courses-table">
+            
+            <thead>
+                <tr>
+                    <th>Course Code</th>
+                    <th>Course Name</th>
+                    <th>Faculty</th>
+                    <th>Enrollment Date</th>
+                    <!--<th class="text-center">Action</th>--> 
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var enrollment in Model.EnrolledCourses)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => enrollment.Course.CourseCode)</td>
+                        <td>@Html.DisplayFor(modelItem => enrollment.Course.CourseName)</td>
+                        <td>@Html.DisplayFor(modelItem => enrollment.Course.Faculty)</td>
+                        <td>@Html.DisplayFor(modelItem => enrollment.EnrollmentDate)</td>
+                        <!--<td class="text-center">-->
+                            <!--<button class="btn btn-sm btn-outline-danger" disabled>Unregister</button>
+                        </td>-->
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info custom-alert" role="alert">
+        You are not currently registered for any courses.
+        @Html.ActionLink("Register for Courses", "RegisterCourses", "UserCourses", null, new { @class = "alert-link" })
+    </div>
+}
+
+@section Scripts {
+    <script>
+        
+    </script>
+}
+

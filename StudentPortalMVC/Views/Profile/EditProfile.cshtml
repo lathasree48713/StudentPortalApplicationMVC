@@ -1,0 +1,80 @@
+﻿@model StudentPortalMVC.Models.Profile
+@{
+    ViewBag.Title = "Edit Profile";
+}
+
+<h2 class="text-success mb-4">Edit Profile</h2>
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+@using (Html.BeginForm("EditProfile", "Profile", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+{
+    @Html.AntiForgeryToken() // <-- YOU WERE MISSING THIS CRITICAL LINE!
+    @Html.HiddenFor(m => m.ProfileId)
+    @Html.HiddenFor(m => m.UserId) 
+    @Html.HiddenFor(m => m.ProfileImagePath)
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <!-- Personal Information -->
+                    <h4 class="mb-3 text-secondary">Personal Information</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            @Html.LabelFor(m => m.FirstName)
+                            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "Enter first name" })
+                            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            @Html.LabelFor(m => m.LastName)
+                            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Enter last name" })
+                            @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.DateOfBirth)
+                        @Html.TextBoxFor(m => m.DateOfBirth, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                        @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Contact Information -->
+                    <h4 class="mt-4 mb-3 text-secondary">Contact Details</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            @Html.LabelFor(m => m.Email)
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email", placeholder = "Enter email address" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            @Html.LabelFor(m => m.Phone)
+                            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", placeholder = "Enter phone number" })
+                            @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <!-- Academic Details -->
+                    <h4 class="mt-4 mb-3 text-secondary">Academic Info</h4>
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Department)
+                        @Html.TextBoxFor(m => m.Department, new { @class = "form-control", placeholder = "Enter department" })
+                    </div>
+
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Address)
+                        @Html.TextAreaFor(m => m.Address, 3, 40, new { @class = "form-control", placeholder = "Enter address" })
+                    </div>
+                    <!-- Upload Profile Photo -->
+                    <h4 class="mt-4 mb-3 text-secondary">Upload Profile Photo</h4>
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.ProfileImageFile, new { @class = "form-label" })
+                        @Html.TextBoxFor(m => m.ProfileImageFile, new { @class = "form-control", type = "file", accept = "image/*" })
+                        @Html.ValidationMessageFor(m => m.ProfileImageFile, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="text-end mt-4">
+                        <button type="submit" class="btn btn-success px-4">Save Changes</button>
+                        @Html.ActionLink("Cancel", "UserProfile", new { id = Model.ProfileId }, new { @class = "btn btn-secondary ms-2" })
+                    </div>
+
+                </div>
+            </div>
+        }

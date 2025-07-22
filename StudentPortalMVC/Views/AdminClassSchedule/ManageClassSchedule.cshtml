@@ -1,0 +1,59 @@
+﻿@model IEnumerable<StudentPortalMVC.Models.ClassSchedule>
+
+@{
+    ViewBag.Title = "Manage Class Schedules";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Your Admin Layout
+}
+
+<h2 class="page-title">Manage Class Schedules</h2>
+
+@* Display TempData messages *@
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<p>
+    @Html.ActionLink("Add New Class Schedule Entry", "CreateClassSchedule", "AdminClassSchedule", null, new { @class = "btn btn-primary mb-3" })
+</p>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Course.CourseName)</th>
+            <th>@Html.DisplayNameFor(model => model.Teacher.Name)</th> @* Assuming Email is a good display for teacher *@
+            <th>Day</th>
+            <th>@Html.DisplayNameFor(model => model.StartTime)</th>
+            <th>@Html.DisplayNameFor(model => model.EndTime)</th>
+            <th>@Html.DisplayNameFor(model => model.RoomNumber)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Course.CourseName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Teacher.Name)</td> @* Or item.Teacher.UserName or a custom display property *@
+                <td>@ViewBag.DayOfWeekConverter(item.DayOfWeek)</td> @* Using the helper for int to string conversion *@
+                <td>@Html.DisplayFor(modelItem => item.StartTime)</td>
+                <td>@Html.DisplayFor(modelItem => item.EndTime)</td>
+                <td>@Html.DisplayFor(modelItem => item.RoomNumber)</td>
+                <td>
+                    @Html.ActionLink("Edit", "EditClassSchedule", new { id = item.ClassScheduleId }, new { @class = "btn btn-sm btn-info" }) |
+                    @Html.ActionLink("Delete", "DeleteClassSchedule", new { id = item.ClassScheduleId }, new { @class = "btn btn-sm btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

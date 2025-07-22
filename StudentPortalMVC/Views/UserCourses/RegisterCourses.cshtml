@@ -1,0 +1,119 @@
+﻿@model StudentPortalMVC.ViewModels.UserCoursesViewModel
+
+@{
+    ViewBag.Title = "Register for Courses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="page-title">Register for Courses</h2>
+
+@* Alerts remain here *@
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show custom-alert-success" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show custom-alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<p class="page-description">
+    Here are all the courses available. Select the ones you wish to register for (maximum 6 courses total).
+</p>
+
+@* --- START OF SEARCH BOX --- *@
+@using (Html.BeginForm("RegisterCourses", "UserCourses", FormMethod.Get, new { @class = "mb-4" })) // Use GET for search forms
+{
+    <div class="input-group">
+        @Html.TextBoxFor(m => m.SearchQuery, new { @class = "form-control", placeholder = "Search by course code, name, or faculty...", @aria_label = "Search Courses" })
+        <button class="btn btn-outline-primary" type="submit">Search</button>
+        @if (!string.IsNullOrWhiteSpace(Model.SearchQuery))
+        {
+            // Add a clear button if there's an active search query
+            <a href="@Url.Action("RegisterCourses", "UserCourses")" class="btn btn-outline-secondary">Clear</a>
+        }
+    </div>
+}
+
+@using (Html.BeginForm("Register", "UserCourses", FormMethod.Post))
+{
+    @Html.AntiForgeryToken() 
+
+    <div class="register-courses-container">
+
+        <table class="table register-courses-table">
+            <thead>
+                <tr>
+                    <th class="text-center">Select</th> 
+                    <th>Course Code</th>
+                    <th>Course Name</th>
+                    <th>Faculty</th>
+                    <th>Duration (Hours)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var course in Model.AllCourses)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @if (Model.UserEnrolledCourseIds.Contains(course.CourseId))
+                            {
+                               
+                                <span class="text-muted">N/A</span>
+                            }
+                            else
+                            {
+                                
+                                <input type="checkbox" name="selectedCourseIds" value="@course.CourseId" class="form-check-input" />
+                            }
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => course.CourseCode)</td>
+                        <td>@Html.DisplayFor(modelItem => course.CourseName)</td>
+                        <td>@Html.DisplayFor(modelItem => course.Faculty)</td> 
+                        <td>@Html.DisplayFor(modelItem => course.CourseDuration)</td>
+                        <td>
+                            @if (Model.UserEnrolledCourseIds.Contains(course.CourseId))
+                            {
+                                <span class="status-registered">Registered</span>
+                            }
+                            else
+                            {
+                                <span class="status-available">Available</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="form-group mt-4 text-center">
+           
+            <button type="submit" class="btn btn-success btn-lg register-btn">Register Selected Courses</button>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    <script>
+        // Optional: Client-side validation or dynamic features for checkboxes
+        $(document).ready(function () {
+            // Example: Limit selections (optional, server-side validation is mandatory)
+            $('input[name="selectedCourseIds"]').on('change', function () {
+                var selectedCount = $('input[name="selectedCourseIds"]:checked').length;
+                if (selectedCount > 6) {
+                    alert('You can select a maximum of 6 courses.');
+                    $(this).prop('checked', false); // Uncheck the last one
+                }
+            });
+        });
+    </script>
+}

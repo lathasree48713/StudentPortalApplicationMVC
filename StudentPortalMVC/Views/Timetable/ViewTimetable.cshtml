@@ -1,0 +1,130 @@
+﻿@model StudentPortalMVC.ViewModels.TimetableViewModel
+@using StudentPortalMVC.Models 
+@using System.Linq
+@{
+    ViewBag.Title = "My Timetable";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    var daysOfWeek = new List<int> { 1, 2, 3, 4, 5 };
+}
+
+<h2>My Timetable</h2>
+
+<p>Here is your current class schedule:</p>
+
+@if (Model.UserClassSchedules != null && Model.UserClassSchedules.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped timetable-grid">
+            <thead>
+                <tr>
+                    <th style="width: 120px;">Time Slot</th>
+                    @foreach (var day in daysOfWeek)
+                    {
+                        <th>@Model.GetDayName(day)</th>
+                        @* Columns for days of the week *@
+                    }
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var startTime in Model.AllUniqueStartTimes)
+                {
+                    <tr>
+                        <td>
+                            @startTime.ToString("hh\\:mm") -
+                            @{
+
+                                var maxEndTimeForSlot = Model.UserClassSchedules
+                                                            .Where(s => s.StartTime == startTime)
+                                                            .Select(s => s.EndTime)
+                                                            .DefaultIfEmpty(startTime.Add(TimeSpan.FromHours(1))) // Default to 1 hour if no end time
+                                                            .Max();
+                            }
+                            @maxEndTimeForSlot.ToString("hh\\:mm")
+                        </td>
+
+
+                        @foreach (var day in daysOfWeek)
+                        {
+                            <td>
+
+                                @{
+                                    var schedulesForDay = Model.SchedulesGroupedByDay.ContainsKey(day) ?
+                                                            Model.SchedulesGroupedByDay[day] :
+                                                            new List<StudentPortalMVC.Models.ClassSchedule>();// Ensure it's an empty list if key not found
+
+                                    // Get ALL classes that match this specific time slot for the current day
+                                    // This will return all entries for that time slot (e.g., if a student has two classes at 9 AM on Monday)
+                                    var classesAtSlot = schedulesForDay.Where(s => s.StartTime == startTime).ToList();
+                                }
+
+
+
+                                @if (classesAtSlot.Any()) // Check if there are any classes for this slot
+                                {
+                                    foreach (var classItem in classesAtSlot) // Loop through ALL matching classes for this slot
+                                    {
+                                        <div class="timetable-slot-content">
+                                            <strong>@Html.DisplayFor(modelItem => classItem.Course.CourseCode)</strong><br />
+                                            @Html.DisplayFor(modelItem => classItem.Course.CourseName)<br />
+                                            <small>@Html.DisplayFor(modelItem => classItem.RoomNumber)</small><br />
+                                            @if (classItem.Teacher != null) // Now we can display teacher name if included
+                                            {
+                                                <small>@Html.DisplayFor(modelItem => classItem.Teacher.Name)</small>
+                                            }
+                                        </div>
+                                            @* Add a horizontal rule/separator if there are multiple classes in one cell, for visual clarity *@
+                                    if (classesAtSlot.Count() > 1 && classesAtSlot.IndexOf(classItem) < classesAtSlot.Count() - 1)
+                                    {
+                                                <hr style="margin: 2px 0; border-top: 1px dashed #ccc;" />
+                                            }
+                                        }
+                                    }
+                                else
+                                {
+                                    @* If no class exists for this slot, display an empty span *@
+                                    <span></span>
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        You are not currently enrolled in any classes with a defined schedule, or no schedule entries exist for your enrolled courses.
+        @Html.ActionLink("Register for Courses", "RegisterCourses", "UserCourses", null, new { @class = "alert-link" })
+    </div>
+}
+
+@section Scripts {
+    <script>
+
+    </script>
+}
+
+<style>
+
+    .timetable-grid th, .timetable-grid td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 8px;
+        min-width: 100px;
+    }
+
+    .timetable-slot-content {
+        font-size: 0.9em;
+        line-height: 1.3;
+    }
+
+    .timetable-grid tbody tr td:first-child {
+        font-weight: bold;
+        background-color: #f8f9fa;
+    }
+</style>
